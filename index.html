@@ -22,7 +22,8 @@
                         danger: '#dc2626',
                         card: '#1a0040',
                         pink: '#ec4899',
-                        green: '#10b981'
+                        green: '#10b981',
+                        amber: '#f59e0b'
                     },
                     fontFamily: {
                         display: ['Bebas Neue', 'cursive'],
@@ -36,6 +37,38 @@
     <style>
         * {
             font-family: 'Nunito', sans-serif;
+        }
+
+        /* ===================================== */
+        /* CURSOR OCULTO - SÓ A FOGUEIRA (CORRIGIDO) */
+        /* ===================================== */
+        html {
+            cursor: none;
+        }
+
+        body {
+            cursor: none;
+        }
+
+        /* Mantém cursor em dispositivos touch */
+        @media (pointer: coarse) {
+
+            html,
+            body {
+                cursor: auto;
+            }
+
+            #fogueira-mouse {
+                display: none !important;
+            }
+        }
+
+        /* Garante que a fogueira fique sempre visível e suave */
+        .fogueira-seguidor {
+            will-change: left, top;
+            transform: translate(-50%, -50%) translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         body {
@@ -109,7 +142,7 @@
             transform: scale(1.06);
         }
 
-        /* Glow button */
+        /* Glow buttons */
         .btn-glow {
             background: linear-gradient(135deg, #f97316, #fb923c);
             box-shadow: 0 4px 20px rgba(249, 115, 22, 0.5);
@@ -121,7 +154,6 @@
             box-shadow: 0 8px 30px rgba(249, 115, 22, 0.7);
         }
 
-        /* Pink glow button */
         .btn-pink-glow {
             background: linear-gradient(135deg, #ec4899, #f472b6);
             box-shadow: 0 4px 20px rgba(236, 72, 153, 0.5);
@@ -133,7 +165,6 @@
             box-shadow: 0 8px 30px rgba(236, 72, 153, 0.7);
         }
 
-        /* Green glow button */
         .btn-green-glow {
             background: linear-gradient(135deg, #10b981, #34d399);
             box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5);
@@ -290,18 +321,6 @@
             animation: floatUp 1.5s ease-out forwards;
         }
 
-        /* Food card */
-        .food-card {
-            background: linear-gradient(145deg, #1a0040, #0f0025);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.3s;
-        }
-
-        .food-card:hover {
-            border-color: rgba(16, 185, 129, 0.4);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-        }
-
         /* Tab button */
         .tab-btn {
             transition: all 0.2s;
@@ -327,13 +346,14 @@
             box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
         }
 
-        /* Fogueira que segue o mouse */
+        /* ===================================== */
+        /* FOGUEIRA QUE SEGUE O MOUSE */
+        /* ===================================== */
         .fogueira-seguidor {
             position: fixed;
             pointer-events: none;
             z-index: 9998;
             transform: translate(-50%, -50%);
-            transition: left 0.15s ease-out, top 0.15s ease-out;
             filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.8));
         }
 
@@ -381,7 +401,7 @@
             animation-delay: 0.4s;
         }
 
-        /* Fogueira (lenha) */
+        /* Lenha */
         .lenha {
             position: absolute;
             background: linear-gradient(to right, #451a03, #78350f, #451a03);
@@ -427,24 +447,28 @@
             left: 20px;
             bottom: 40px;
             animation-delay: 0s;
+            --fagulha-x: 15px;
         }
 
         .fagulha-2 {
             left: 35px;
             bottom: 42px;
             animation-delay: 0.4s;
+            --fagulha-x: -10px;
         }
 
         .fagulha-3 {
             left: 28px;
             bottom: 38px;
             animation-delay: 0.8s;
+            --fagulha-x: 20px;
         }
 
         .fagulha-4 {
             left: 40px;
             bottom: 36px;
             animation-delay: 1.2s;
+            --fagulha-x: -15px;
         }
 
         @keyframes chamaDanca {
@@ -480,7 +504,7 @@
             }
         }
 
-        /* Efeito de calor */
+        /* Calor */
         .calor-ondas {
             position: absolute;
             bottom: 30px;
@@ -506,6 +530,164 @@
                 opacity: 0.2;
             }
         }
+
+        /* ===================================== */
+        /* CARDÁPIO PROFISSIONAL */
+        /* ===================================== */
+        .cardapio-card {
+            background: linear-gradient(160deg, #1a0040, #0f0025);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(.25, .8, .25, 1);
+            position: relative;
+        }
+
+        .cardapio-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(16, 185, 129, 0.2);
+        }
+
+        .cardapio-card .cardapio-img-container {
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cardapio-card .cardapio-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .cardapio-card:hover .cardapio-img-container img {
+            transform: scale(1.1);
+        }
+
+        .cardapio-card .cardapio-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 60%);
+        }
+
+        .cardapio-card .cardapio-badge-promo {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #dc2626;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cardapio-card .cardapio-badge-vegano {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #34d399;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cardapio-card .cardapio-info {
+            padding: 1.25rem;
+        }
+
+        .cardapio-card .cardapio-nome {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            color: white;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .cardapio-card .cardapio-desc {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .cardapio-card .cardapio-estrelas {
+            color: #f59e0b;
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .cardapio-card .cardapio-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .cardapio-card .cardapio-preco {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.75rem;
+            color: #10b981;
+            letter-spacing: 0.5px;
+        }
+
+        .cardapio-card .cardapio-btn-add {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .cardapio-card .cardapio-btn-add:hover {
+            background: rgba(16, 185, 129, 0.35);
+            transform: scale(1.05);
+        }
+
+        /* Categoria do cardápio */
+        .cardapio-cat-btn {
+            transition: all 0.25s;
+            position: relative;
+            font-weight: 700;
+        }
+
+        .cardapio-cat-btn.active {
+            background: #10b981;
+            color: white;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .cardapio-cat-btn .cat-count {
+            font-size: 0.65rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 7px;
+            border-radius: 9999px;
+            margin-left: 6px;
+        }
+
+        /* Otimização de performance */
+        .fogueira-seguidor {
+            contain: layout style paint;
+            will-change: transform;
+        }
     </style>
 </head>
 
@@ -514,20 +696,16 @@
     <!-- Fogueira que segue o mouse -->
     <div id="fogueira-mouse" class="fogueira-seguidor">
         <div class="fogueira-container">
-            <!-- Chamas -->
             <div class="chama chama-1"></div>
             <div class="chama chama-2"></div>
             <div class="chama chama-3"></div>
-            <!-- Lenha -->
             <div class="lenha lenha-1"></div>
             <div class="lenha lenha-2"></div>
             <div class="lenha lenha-3"></div>
-            <!-- Fagulhas -->
             <div class="fagulha fagulha-1"></div>
             <div class="fagulha fagulha-2"></div>
             <div class="fagulha fagulha-3"></div>
             <div class="fagulha fagulha-4"></div>
-            <!-- Ondas de calor -->
             <div class="calor-ondas"></div>
         </div>
     </div>
@@ -644,304 +822,294 @@
     </div>
 
     <!-- ===================================== -->
-    <!-- NAVBAR FIXA -->
+    <!-- PÁGINA PRINCIPAL -->
     <!-- ===================================== -->
-    <nav class="fixed top-0 left-0 right-0 z-40 flex justify-between items-center px-6 py-4">
-        <a href="#" class="flex items-center gap-2">
-            <span class="text-2xl">🎪</span>
-            <span class="font-display text-2xl text-white tracking-wide">Arraiá Festival</span>
-        </a>
+    <div id="pagina-principal">
 
-        <div class="flex items-center gap-3">
-            <button onclick="mostrarLogin()"
-                class="text-white/70 hover:text-white px-4 py-2 rounded-xl font-bold text-sm transition">
-                Entrar
-            </button>
-            <button onclick="mostrarCadastro()" class="btn-glow text-white px-5 py-2 rounded-xl font-bold text-sm">
-                Cadastro
-            </button>
-            <button onclick="abrirCarrinho()"
-                class="relative bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl font-bold text-sm transition border border-white/10">
-                🛒
-                <span id="cart-count" class="text-white"></span>
-            </button>
-        </div>
-    </nav>
+        <!-- NAVBAR FIXA -->
+        <nav class="fixed top-0 left-0 right-0 z-40 flex justify-between items-center px-6 py-4">
+            <a href="#" class="flex items-center gap-2">
+                <span class="text-2xl">🎪</span>
+                <span class="font-display text-2xl text-white tracking-wide">Arraiá Festival</span>
+            </a>
 
-    <!-- ===================================== -->
-    <!-- HERO -->
-    <!-- ===================================== -->
-    <header class="relative h-[640px] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop"
-            class="absolute inset-0 w-full h-full object-cover opacity-50">
-        <div class="absolute inset-0 hero-gradient"></div>
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div class="absolute top-1/3 right-0 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl"></div>
-            <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-purple-900/20 blur-3xl"></div>
-        </div>
-
-        <div class="relative z-10 flex flex-col justify-end h-full px-8 pb-20 max-w-6xl mx-auto">
-            <div class="inline-flex items-center gap-2 badge rounded-full px-4 py-1.5 w-fit mb-6 text-sm font-bold">
-                <span>✦</span> Temporada Junina 2025
-            </div>
-            <h1 class="font-display text-7xl md:text-9xl text-white leading-none tracking-tight">
-                Os Maiores<br>
-                <span class="text-secondary">Shows</span><br>
-                Juninos
-            </h1>
-            <p class="text-white/60 text-lg mt-6 max-w-lg font-semibold">
-                Os melhores artistas do forró, sertanejo e piseiro em um só lugar. Garanta seu ingresso agora.
-            </p>
-            <div class="flex gap-4 mt-8 flex-wrap">
-                <button onclick="document.getElementById('shows-section').scrollIntoView({behavior:'smooth'})"
-                    class="btn-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
-                    Ver Shows
+            <div class="flex items-center gap-3">
+                <button onclick="mostrarLogin()"
+                    class="text-white/70 hover:text-white px-4 py-2 rounded-xl font-bold text-sm transition">
+                    Entrar
                 </button>
-                <button onclick="document.getElementById('correio-elegante').scrollIntoView({behavior:'smooth'})"
-                    class="btn-pink-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
-                    💌 Correio Elegante
+                <button onclick="mostrarCadastro()" class="btn-glow text-white px-5 py-2 rounded-xl font-bold text-sm">
+                    Cadastro
                 </button>
-                <button onclick="document.getElementById('barraquinhas').scrollIntoView({behavior:'smooth'})"
-                    class="btn-green-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
-                    🍴 Comidas Típicas
+                <button onclick="abrirCarrinho()"
+                    class="relative bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl font-bold text-sm transition border border-white/10">
+                    🛒
+                    <span id="cart-count" class="text-white"></span>
                 </button>
             </div>
-        </div>
-    </header>
+        </nav>
 
-    <!-- ===================================== -->
-    <!-- CATEGORIAS -->
-    <!-- ===================================== -->
-    <section class="max-w-6xl mx-auto px-6 mt-16 relative z-10">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="w-1 h-6 bg-secondary rounded-full"></div>
-            <h2 class="text-sm font-bold text-white/50 uppercase tracking-widest">Filtrar por estilo</h2>
-        </div>
-        <div class="flex gap-3 flex-wrap">
-            <button onclick="filtrarCategoria('')" data-cat=""
-                class="cat-btn active bg-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
-                Todos
-            </button>
-            <button onclick="filtrarCategoria('Forró')" data-cat="Forró"
-                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
-                🪗 Forró
-            </button>
-            <button onclick="filtrarCategoria('Funk')" data-cat="Funk"
-                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
-                🎙️ Funk
-            </button>
-            <button onclick="filtrarCategoria('Piseiro')" data-cat="Piseiro"
-                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
-                🎵 Piseiro
-            </button>
-            <button onclick="filtrarCategoria('Pagode')" data-cat="Pagode"
-                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
-                🥁 Pagode
-            </button>
-            <button onclick="filtrarCategoria('Sertanejo')" data-cat="Sertanejo"
-                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
-                🤠 Sertanejo
-            </button>
-            <button onclick="filtrarCategoria('Trap')" data-cat="Trap"
-                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
-                💎 Trap
-            </button>
-        </div>
-    </section>
-
-    <!-- ===================================== -->
-    <!-- SHOWS -->
-    <!-- ===================================== -->
-    <section id="shows-section" class="max-w-6xl mx-auto px-6 mt-12 pb-24 relative z-10">
-        <div class="flex items-center justify-between mb-10">
-            <div>
-                <h2 class="font-display text-5xl text-white tracking-wide">Agenda de Shows</h2>
-                <p id="shows-count" class="text-white/40 text-sm mt-1 font-semibold"></p>
-            </div>
-        </div>
-        <div id="loading-shows" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
-            <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
-            <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
-        </div>
-        <div id="error-shows" class="hidden text-center py-20">
-            <div class="text-5xl mb-4">😕</div>
-            <p class="text-white/50 font-bold">Não foi possível carregar os shows.</p>
-            <button onclick="carregarShows()" class="btn-glow mt-4 px-6 py-2 rounded-xl text-sm font-bold text-white">
-                Tentar novamente
-            </button>
-        </div>
-        <div id="lista-shows" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 hidden"></div>
-    </section>
-
-    <!-- ===================================== -->
-    <!-- CORREIO ELEGANTE + BARRACA DO BEIJO -->
-    <!-- ===================================== -->
-    <section id="correio-elegante" class="max-w-6xl mx-auto px-6 pb-24 relative z-10">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="w-1 h-6 bg-pink rounded-full"></div>
-            <h2 class="text-sm font-bold text-white/50 uppercase tracking-widest">Correio Elegante & Barraca do Beijo
-            </h2>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-            <!-- CORREIO ELEGANTE COM IA -->
-            <div class="modal-inner rounded-3xl p-6">
-                <div class="flex items-center gap-3 mb-5">
-                    <span class="text-4xl">💌</span>
-                    <div>
-                        <h3 class="font-display text-3xl text-white tracking-wide">Correio Elegante IA</h3>
-                        <p class="text-white/40 text-xs">Cantadas caipiras geradas por inteligência artificial</p>
-                    </div>
-                </div>
-
-                <div class="space-y-3 mb-4">
-                    <input type="text" id="correio-para"
-                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30"
-                        placeholder="Para quem é a cantada? (nome)">
-                    <select id="correio-estilo"
-                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
-                        <option value="caipira" class="bg-card">🌽 Caipira Raiz</option>
-                        <option value="engracada" class="bg-card">😂 Engraçada</option>
-                        <option value="romantica" class="bg-card">🌹 Romântica</option>
-                        <option value="atacante" class="bg-card">🔥 Atacante</option>
-                        <option value="fofinha" class="bg-card">🧸 Fofinha</option>
-                    </select>
-                </div>
-
-                <button onclick="gerarCantada()" class="btn-pink-glow w-full text-white py-3 rounded-xl font-bold mb-4">
-                    ✨ Gerar Cantada com IA
-                </button>
-
-                <div id="cantada-resultado" class="hidden bg-white/5 rounded-xl p-4 border border-pink/20">
-                    <div class="flex items-start gap-3">
-                        <span class="text-3xl">🤖</span>
-                        <div>
-                            <p class="text-xs text-pink/70 font-semibold mb-1">Cantada Gerada:</p>
-                            <p id="cantada-texto" class="text-white/90 text-sm italic leading-relaxed"></p>
-                            <button onclick="enviarCantada()"
-                                class="mt-3 bg-pink/20 hover:bg-pink/30 text-pink-300 px-4 py-1.5 rounded-lg text-xs font-bold transition">
-                                📨 Enviar Cantada
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Histórico de cantadas -->
-                <div id="historico-cantadas" class="mt-4 space-y-2 max-h-40 overflow-y-auto"></div>
+        <!-- HERO -->
+        <header class="relative h-[640px] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop"
+                class="absolute inset-0 w-full h-full object-cover opacity-50">
+            <div class="absolute inset-0 hero-gradient"></div>
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div class="absolute top-1/3 right-0 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl"></div>
+                <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-purple-900/20 blur-3xl"></div>
             </div>
 
-            <!-- BARRACA DO BEIJO - CHAT E FILA VIRTUAL -->
-            <div class="modal-inner rounded-3xl p-6 flex flex-col">
-                <div class="flex items-center gap-3 mb-5">
-                    <span class="text-4xl">💋</span>
-                    <div>
-                        <h3 class="font-display text-3xl text-white tracking-wide">Barraca do Beijo</h3>
-                        <p class="text-white/40 text-xs">Chat direto • Agende seu horário na fila virtual</p>
-                    </div>
+            <div class="relative z-10 flex flex-col justify-end h-full px-8 pb-20 max-w-6xl mx-auto">
+                <div class="inline-flex items-center gap-2 badge rounded-full px-4 py-1.5 w-fit mb-6 text-sm font-bold">
+                    <span>✦</span> Temporada Junina 2025
                 </div>
-
-                <!-- Status da fila -->
-                <div class="bg-white/5 rounded-xl p-4 mb-4 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-white/40">Fila Virtual</p>
-                        <p class="font-bold text-white text-lg">
-                            <span id="fila-posicao">--</span> pessoas na frente
-                        </p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-xs text-white/40">Tempo estimado</p>
-                        <p id="fila-tempo" class="font-bold text-pink text-lg">-- min</p>
-                    </div>
-                </div>
-
-                <!-- Chat -->
-                <div id="chat-beijo"
-                    class="flex-1 bg-white/5 rounded-xl p-4 mb-4 max-h-48 overflow-y-auto space-y-3 min-h-[150px]">
-                    <div class="chat-message text-center">
-                        <span class="text-white/30 text-xs">💋 Bem-vindo à Barraca do Beijo!</span>
-                    </div>
-                    <div class="chat-message text-center">
-                        <span class="text-white/30 text-xs">Agende seu horário ou tire dúvidas 💕</span>
-                    </div>
-                </div>
-
-                <!-- Input do chat -->
-                <div class="flex gap-2">
-                    <input type="text" id="chat-input"
-                        class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 text-sm"
-                        placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')enviarMensagemBeijo()">
-                    <button onclick="enviarMensagemBeijo()"
-                        class="btn-pink-glow text-white px-5 py-3 rounded-xl font-bold text-sm">
-                        Enviar
+                <h1 class="font-display text-7xl md:text-9xl text-white leading-none tracking-tight">
+                    Os Maiores<br>
+                    <span class="text-secondary">Shows</span><br>
+                    Juninos
+                </h1>
+                <p class="text-white/60 text-lg mt-6 max-w-lg font-semibold">
+                    Os melhores artistas do forró, sertanejo e piseiro em um só lugar. Garanta seu ingresso agora.
+                </p>
+                <div class="flex gap-4 mt-8 flex-wrap">
+                    <button onclick="document.getElementById('shows-section').scrollIntoView({behavior:'smooth'})"
+                        class="btn-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
+                        Ver Shows
+                    </button>
+                    <button onclick="abrirPagina('correio')"
+                        class="btn-pink-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
+                        💌 Correio Elegante
+                    </button>
+                    <button onclick="abrirPagina('cardapio')"
+                        class="btn-green-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
+                        🍴 Cardápio Junino
                     </button>
                 </div>
+            </div>
+        </header>
 
-                <!-- Botão agendar -->
-                <button onclick="agendarBeijo()" class="btn-glow w-full mt-3 text-white py-3 rounded-xl font-bold">
-                    📅 Agendar Horário na Fila Virtual
+        <!-- CATEGORIAS -->
+        <section class="max-w-6xl mx-auto px-6 mt-16 relative z-10">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-1 h-6 bg-secondary rounded-full"></div>
+                <h2 class="text-sm font-bold text-white/50 uppercase tracking-widest">Filtrar por estilo</h2>
+            </div>
+            <div class="flex gap-3 flex-wrap" id="categorias-container"></div>
+        </section>
+
+        <!-- SHOWS -->
+        <section id="shows-section" class="max-w-6xl mx-auto px-6 mt-12 pb-24 relative z-10">
+            <div class="flex items-center justify-between mb-10">
+                <div>
+                    <h2 class="font-display text-5xl text-white tracking-wide">Agenda de Shows</h2>
+                    <p id="shows-count" class="text-white/40 text-sm mt-1 font-semibold"></p>
+                </div>
+            </div>
+            <div id="loading-shows" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
+                <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
+                <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
+            </div>
+            <div id="error-shows" class="hidden text-center py-20">
+                <div class="text-5xl mb-4">😕</div>
+                <p class="text-white/50 font-bold">Não foi possível carregar os shows.</p>
+                <button onclick="carregarShows()"
+                    class="btn-glow mt-4 px-6 py-2 rounded-xl text-sm font-bold text-white">
+                    Tentar novamente
                 </button>
             </div>
+            <div id="lista-shows" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 hidden"></div>
+        </section>
 
-        </div>
-    </section>
+        <!-- FOOTER -->
+        <footer class="border-t border-white/6 relative z-10">
+            <div class="max-w-6xl mx-auto px-6 py-16">
+                <div class="flex flex-col md:flex-row justify-between gap-10">
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-2xl">🎪</span>
+                            <span class="font-display text-2xl text-white tracking-wide">Arraiá Festival</span>
+                        </div>
+                        <p class="text-white/40 text-sm max-w-xs leading-relaxed">
+                            Os melhores shows juninos do Brasil, em um só lugar.
+                        </p>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <p class="text-xs text-white/30 uppercase tracking-widest font-bold mb-1">Contato</p>
+                        <p class="text-white/60 text-sm">📍 Sorocaba — SP</p>
+                        <p class="text-white/60 text-sm">📞 (15) 99999-9999</p>
+                        <p class="text-white/60 text-sm">📸 @arraiafestival</p>
+                    </div>
+                </div>
+                <div class="border-t border-white/6 mt-12 pt-6 flex justify-between items-center">
+                    <p class="text-white/20 text-xs">© 2025 Arraiá Festival. Todos os direitos reservados.</p>
+                    <p class="text-white/20 text-xs">Made with 🧡 no Brasil</p>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <!-- ===================================== -->
-    <!-- BARRAQUINHAS DE COMIDA -->
+    <!-- PÁGINA CORREIO ELEGANTE + BARRACA DO BEIJO -->
     <!-- ===================================== -->
-    <section id="barraquinhas" class="max-w-6xl mx-auto px-6 pb-24 relative z-10">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="w-1 h-6 bg-green rounded-full"></div>
-            <h2 class="text-sm font-bold text-white/50 uppercase tracking-widest">Barraquinhas de Comida</h2>
-        </div>
-
-        <h2 class="font-display text-5xl text-white tracking-wide mb-8">
-            Mini Cardápio Junino
-        </h2>
-
-        <!-- Tabs de categorias de comida -->
-        <div class="flex gap-3 flex-wrap mb-8">
-            <button onclick="filtrarComidas('todas')" data-food-tab="todas"
-                class="tab-btn active bg-green text-white px-5 py-2.5 rounded-xl font-bold text-sm">
-                🍽️ Todas
+    <div id="pagina-correio" class="hidden fixed inset-0 z-[9997] bg-[#0a0015] overflow-y-auto">
+        <div class="max-w-6xl mx-auto px-6 py-8">
+            <button onclick="fecharPagina()"
+                class="mb-8 bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-3 rounded-xl font-bold text-sm transition flex items-center gap-2">
+                ← Voltar para o Festival
             </button>
-            <button onclick="filtrarComidas('salgadas')" data-food-tab="salgadas"
-                class="tab-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm">
-                🥟 Salgadas
-            </button>
-            <button onclick="filtrarComidas('doces')" data-food-tab="doces"
-                class="tab-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm">
-                🍰 Doces
-            </button>
-            <button onclick="filtrarComidas('bebidas')" data-food-tab="bebidas"
-                class="tab-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm">
-                🥤 Bebidas
-            </button>
-        </div>
 
-        <!-- Grid de comidas -->
-        <div id="grid-comidas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
-
-        <!-- Carrinho de comidas -->
-        <div class="mt-8 modal-inner rounded-3xl p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-display text-2xl text-white tracking-wide">🛒 Pedido de Comidas</h3>
-                <span id="comidas-count" class="text-white/40 text-sm">0 itens</span>
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-1 h-6 bg-pink rounded-full"></div>
+                <h2 class="text-sm font-bold text-white/50 uppercase tracking-widest">Correio Elegante & Barraca do
+                    Beijo</h2>
             </div>
-            <div id="carrinho-comidas-itens" class="space-y-2 max-h-48 overflow-y-auto mb-4"></div>
-            <div id="carrinho-comidas-vazio" class="text-center py-6 text-white/30 text-sm">
-                Adicione comidas ao seu pedido 🍴
-            </div>
-            <div class="flex justify-between items-center pt-4 border-t border-white/8">
-                <span class="font-display text-2xl text-green tracking-wide" id="total-comidas">R$ 0,00</span>
-                <button onclick="finalizarPedidoComida()"
-                    class="btn-green-glow text-white px-8 py-3 rounded-xl font-bold">
-                    Finalizar Pedido 🛍️
-                </button>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="modal-inner rounded-3xl p-6">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="text-4xl">💌</span>
+                        <div>
+                            <h3 class="font-display text-3xl text-white tracking-wide">Correio Elegante IA</h3>
+                            <p class="text-white/40 text-xs">Cantadas caipiras geradas por inteligência artificial</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 mb-4">
+                        <input type="text" id="correio-para"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30"
+                            placeholder="Para quem é a cantada? (nome)">
+                        <select id="correio-estilo"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+                            <option value="caipira" class="bg-card">🌽 Caipira Raiz</option>
+                            <option value="engracada" class="bg-card">😂 Engraçada</option>
+                            <option value="romantica" class="bg-card">🌹 Romântica</option>
+                            <option value="atacante" class="bg-card">🔥 Atacante</option>
+                            <option value="fofinha" class="bg-card">🧸 Fofinha</option>
+                        </select>
+                    </div>
+
+                    <button onclick="gerarCantada()"
+                        class="btn-pink-glow w-full text-white py-3 rounded-xl font-bold mb-4">
+                        ✨ Gerar Cantada com IA
+                    </button>
+
+                    <div id="cantada-resultado" class="hidden bg-white/5 rounded-xl p-4 border border-pink/20">
+                        <div class="flex items-start gap-3">
+                            <span class="text-3xl">🤖</span>
+                            <div>
+                                <p class="text-xs text-pink/70 font-semibold mb-1">Cantada Gerada:</p>
+                                <p id="cantada-texto" class="text-white/90 text-sm italic leading-relaxed"></p>
+                                <button onclick="enviarCantada()"
+                                    class="mt-3 bg-pink/20 hover:bg-pink/30 text-pink-300 px-4 py-1.5 rounded-lg text-xs font-bold transition">
+                                    📨 Enviar Cantada
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="historico-cantadas" class="mt-4 space-y-2 max-h-40 overflow-y-auto"></div>
+                </div>
+
+                <div class="modal-inner rounded-3xl p-6 flex flex-col">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="text-4xl">💋</span>
+                        <div>
+                            <h3 class="font-display text-3xl text-white tracking-wide">Barraca do Beijo</h3>
+                            <p class="text-white/40 text-xs">Chat direto • Agende seu horário na fila virtual</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 rounded-xl p-4 mb-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-white/40">Fila Virtual</p>
+                            <p class="font-bold text-white text-lg">
+                                <span id="fila-posicao">--</span> pessoas na frente
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-white/40">Tempo estimado</p>
+                            <p id="fila-tempo" class="font-bold text-pink text-lg">-- min</p>
+                        </div>
+                    </div>
+
+                    <div id="chat-beijo"
+                        class="flex-1 bg-white/5 rounded-xl p-4 mb-4 max-h-48 overflow-y-auto space-y-3 min-h-[150px]">
+                        <div class="chat-message text-center">
+                            <span class="text-white/30 text-xs">💋 Bem-vindo à Barraca do Beijo!</span>
+                        </div>
+                        <div class="chat-message text-center">
+                            <span class="text-white/30 text-xs">Agende seu horário ou tire dúvidas 💕</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <input type="text" id="chat-input"
+                            class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 text-sm"
+                            placeholder="Digite sua mensagem..."
+                            onkeydown="if(event.key==='Enter')enviarMensagemBeijo()">
+                        <button onclick="enviarMensagemBeijo()"
+                            class="btn-pink-glow text-white px-5 py-3 rounded-xl font-bold text-sm">
+                            Enviar
+                        </button>
+                    </div>
+
+                    <button onclick="agendarBeijo()" class="btn-glow w-full mt-3 text-white py-3 rounded-xl font-bold">
+                        📅 Agendar Horário na Fila Virtual
+                    </button>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- PÁGINA CARDÁPIO PROFISSIONAL -->
+    <!-- ===================================== -->
+    <div id="pagina-cardapio" class="hidden fixed inset-0 z-[9997] bg-[#0a0015] overflow-y-auto">
+        <div class="max-w-6xl mx-auto px-6 py-8">
+            <button onclick="fecharPagina()"
+                class="mb-8 bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-3 rounded-xl font-bold text-sm transition flex items-center gap-2">
+                ← Voltar para o Festival
+            </button>
+
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 badge rounded-full px-4 py-1.5 mb-4 text-sm font-bold">
+                    🍴 Cardápio Junino
+                </div>
+                <h1 class="font-display text-6xl md:text-8xl text-white tracking-wide mb-4">
+                    Sabores da<br><span class="text-green">Roça</span>
+                </h1>
+                <p class="text-white/40 text-lg max-w-2xl mx-auto">
+                    Comidas típicas preparadas com ingredientes frescos da fazenda. Peça já!
+                </p>
+            </div>
+
+            <div class="flex gap-3 flex-wrap justify-center mb-10" id="categorias-cardapio"></div>
+
+            <div id="grid-cardapio" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+            </div>
+
+            <div class="modal-inner rounded-3xl p-6 sticky bottom-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h3 class="font-display text-2xl text-white tracking-wide">🛒 Seu Pedido</h3>
+                        <span id="comidas-count" class="text-white/40 text-sm">0 itens</span>
+                    </div>
+                </div>
+                <div id="carrinho-comidas-itens" class="space-y-2 max-h-48 overflow-y-auto mb-4"></div>
+                <div id="carrinho-comidas-vazio" class="text-center py-6 text-white/30 text-sm">
+                    Adicione comidas ao seu pedido 🍴
+                </div>
+                <div class="flex justify-between items-center pt-4 border-t border-white/8">
+                    <span class="font-display text-2xl text-green tracking-wide" id="total-comidas">R$ 0,00</span>
+                    <button onclick="finalizarPedidoComida()"
+                        class="btn-green-glow text-white px-8 py-3 rounded-xl font-bold">
+                        Finalizar Pedido 🛍️
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ===================================== -->
     <!-- MODAL SHOW -->
@@ -1029,41 +1197,8 @@
     <!-- ===================================== -->
     <div id="toast"
         class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] bg-green-900/90 border border-green-700/50 text-green-300 px-6 py-3.5 rounded-2xl font-bold text-sm backdrop-blur-md transition-all duration-300 opacity-0 translate-y-4 pointer-events-none">
-        🎟️ Ingresso adicionado ao carrinho!
     </div>
 
-    <!-- ===================================== -->
-    <!-- FOOTER -->
-    <!-- ===================================== -->
-    <footer class="border-t border-white/6 relative z-10">
-        <div class="max-w-6xl mx-auto px-6 py-16">
-            <div class="flex flex-col md:flex-row justify-between gap-10">
-                <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="text-2xl">🎪</span>
-                        <span class="font-display text-2xl text-white tracking-wide">Arraiá Festival</span>
-                    </div>
-                    <p class="text-white/40 text-sm max-w-xs leading-relaxed">
-                        Os melhores shows juninos do Brasil, em um só lugar.
-                    </p>
-                </div>
-                <div class="flex flex-col gap-3">
-                    <p class="text-xs text-white/30 uppercase tracking-widest font-bold mb-1">Contato</p>
-                    <p class="text-white/60 text-sm">📍 Sorocaba — SP</p>
-                    <p class="text-white/60 text-sm">📞 (15) 99999-9999</p>
-                    <p class="text-white/60 text-sm">📸 @arraiafestival</p>
-                </div>
-            </div>
-            <div class="border-t border-white/6 mt-12 pt-6 flex justify-between items-center">
-                <p class="text-white/20 text-xs">© 2025 Arraiá Festival. Todos os direitos reservados.</p>
-                <p class="text-white/20 text-xs">Made with 🧡 no Brasil</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- ===================================== -->
-    <!-- SCRIPTS -->
-    <!-- ===================================== -->
     <script>
         // =====================================
         // API URL
@@ -1080,9 +1215,147 @@
         let usuarioLogado = null
         let filaBeijo = []
         let ultimoNumeroFila = 0
+        let comidaFiltroAtivo = 'todas'
 
         // =====================================
-        // CANTADAS CAIPIRAS (Banco de IA)
+        // CARDÁPIO PROFISSIONAL
+        // =====================================
+        const cardapio = [{
+            id: 1,
+            nome: 'Pamonha Cremosa',
+            preco: 12.00,
+            categoria: 'salgadas',
+            imagem: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?w=400',
+            desc: 'Pamonha artesanal com queijo canastra e manteiga da roça',
+            estrelas: 5,
+            vegano: false,
+            promocao: false,
+            destaque: true
+        }, {
+            id: 2,
+            nome: 'Curau Especial',
+            preco: 10.00,
+            categoria: 'doces',
+            imagem: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400',
+            desc: 'Curau de milho verde cremoso com canela e cravo',
+            estrelas: 4,
+            vegano: true,
+            promocao: false,
+            destaque: false
+        }, {
+            id: 3,
+            nome: 'Quentão da Casa',
+            preco: 8.00,
+            categoria: 'bebidas',
+            imagem: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400',
+            desc: 'Quentão com gengibre, canela, cravo e um toque de mel',
+            estrelas: 5,
+            vegano: true,
+            promocao: true,
+            destaque: true
+        }, {
+            id: 4,
+            nome: 'Caldo Verde',
+            preco: 14.00,
+            categoria: 'salgadas',
+            imagem: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400',
+            desc: 'Caldo verde com calabresa defumada e couve fresca',
+            estrelas: 5,
+            vegano: false,
+            promocao: false,
+            destaque: true
+        }, {
+            id: 5,
+            nome: 'Canjica Doce',
+            preco: 10.00,
+            categoria: 'doces',
+            imagem: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',
+            desc: 'Canjica branca com leite condensado, coco e amendoim',
+            estrelas: 4,
+            vegano: false,
+            promocao: false,
+            destaque: false
+        }, {
+            id: 6,
+            nome: 'Bolo de Milho',
+            preco: 9.00,
+            categoria: 'doces',
+            imagem: 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=400',
+            desc: 'Bolo de milho caseiro com erva-doce e goiabada',
+            estrelas: 5,
+            vegano: false,
+            promocao: true,
+            destaque: true
+        }, {
+            id: 7,
+            nome: 'Cachorro-Quente',
+            preco: 15.00,
+            categoria: 'salgadas',
+            imagem: 'https://images.unsplash.com/photo-1619740455993-9e612b1af08a?w=400',
+            desc: 'Hot dog com molho especial, batata palha e queijo',
+            estrelas: 4,
+            vegano: false,
+            promocao: false,
+            destaque: false
+        }, {
+            id: 8,
+            nome: 'Suco de Milho',
+            preco: 7.00,
+            categoria: 'bebidas',
+            imagem: 'https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=400',
+            desc: 'Suco de milho verde batido com leite e gelo',
+            estrelas: 4,
+            vegano: true,
+            promocao: false,
+            destaque: false
+        }, {
+            id: 9,
+            nome: 'Espetinho Misto',
+            preco: 16.00,
+            categoria: 'salgadas',
+            imagem: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400',
+            desc: 'Espetinho de carne, frango e linguiça com farofa',
+            estrelas: 5,
+            vegano: false,
+            promocao: false,
+            destaque: true
+        }, {
+            id: 10,
+            nome: 'Pé de Moleque',
+            preco: 6.00,
+            categoria: 'doces',
+            imagem: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400',
+            desc: 'Pé de moleque crocante com amendoim e rapadura',
+            estrelas: 4,
+            vegano: true,
+            promocao: false,
+            destaque: false
+        }, {
+            id: 11,
+            nome: 'Chocolate Quente',
+            preco: 9.00,
+            categoria: 'bebidas',
+            imagem: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f701?w=400',
+            desc: 'Chocolate quente cremoso com chantilly e canela',
+            estrelas: 5,
+            vegano: false,
+            promocao: false,
+            destaque: true
+        }, {
+            id: 12,
+            nome: 'Pastel de Milho',
+            preco: 11.00,
+            categoria: 'salgadas',
+            imagem: 'https://images.unsplash.com/photo-1639755990777-2dd1f9b3e8de?w=400',
+            desc: 'Pastel crocante recheado com milho verde e catupiry',
+            estrelas: 4,
+            vegano: false,
+            promocao: true,
+            destaque: false
+        }]
+
+        // =====================================
+        // CANTADAS CAIPIRAS
         // =====================================
         const cantadasDB = {
             caipira: [
@@ -1122,6 +1395,45 @@
             ]
         }
 
+        // =====================================
+        // SISTEMA DE PÁGINAS
+        // =====================================
+        function abrirPagina(pagina) {
+            document.getElementById('pagina-principal').classList.add('hidden')
+            if (pagina === 'correio') {
+                document.getElementById('pagina-correio').classList.remove('hidden')
+                document.getElementById('pagina-cardapio').classList.add('hidden')
+            } else if (pagina === 'cardapio') {
+                document.getElementById('pagina-cardapio').classList.remove('hidden')
+                document.getElementById('pagina-correio').classList.add('hidden')
+            }
+            window.scrollTo(0, 0)
+        }
+
+        function fecharPagina() {
+            document.getElementById('pagina-correio').classList.add('hidden')
+            document.getElementById('pagina-cardapio').classList.add('hidden')
+            document.getElementById('pagina-principal').classList.remove('hidden')
+            window.scrollTo(0, 0)
+        }
+
+        // =====================================
+        // TOAST
+        // =====================================
+        function mostrarToast(msg = '🎟️ Ingresso adicionado!') {
+            const t = document.getElementById('toast')
+            t.textContent = msg
+            t.classList.remove('opacity-0', 'translate-y-4')
+            t.classList.add('opacity-100', 'translate-y-0')
+            setTimeout(() => {
+                t.classList.add('opacity-0', 'translate-y-4')
+                t.classList.remove('opacity-100', 'translate-y-0')
+            }, 2500)
+        }
+
+        // =====================================
+        // CANTADAS
+        // =====================================
         function gerarCantada() {
             const nome = document.getElementById('correio-para').value.trim() || 'crush'
             const estilo = document.getElementById('correio-estilo').value
@@ -1131,14 +1443,12 @@
             document.getElementById('cantada-resultado').classList.remove('hidden')
             document.getElementById('cantada-texto').textContent = cantada
 
-            // Salva no histórico
             const historico = document.getElementById('historico-cantadas')
             const item = document.createElement('div')
             item.className = 'chat-message bg-white/5 rounded-lg p-3 text-xs text-white/70'
             item.innerHTML = `<span class="text-pink/70 font-bold">Para ${nome}:</span> "${cantada}"`
             historico.insertBefore(item, historico.firstChild)
 
-            // Efeito de corações flutuantes
             criarCoracoesFlutuantes()
         }
 
@@ -1174,16 +1484,15 @@
 
             const chat = document.getElementById('chat-beijo')
 
-            // Mensagem do usuário
             const userMsg = document.createElement('div')
             userMsg.className = 'chat-message flex justify-end'
-            userMsg.innerHTML = `<div class="bg-pink/20 rounded-xl px-4 py-2 max-w-[80%] text-sm text-white/90">${msg}</div>`
+            userMsg.innerHTML =
+                `<div class="bg-pink/20 rounded-xl px-4 py-2 max-w-[80%] text-sm text-white/90">${msg}</div>`
             chat.appendChild(userMsg)
 
             input.value = ''
             chat.scrollTop = chat.scrollHeight
 
-            // Resposta automática da Barraca do Beijo
             setTimeout(() => {
                 const respostas = [
                     '💋 Oiê! Já já alguém te atende, viu?',
@@ -1195,7 +1504,8 @@
                 const resposta = respostas[Math.floor(Math.random() * respostas.length)]
                 const botMsg = document.createElement('div')
                 botMsg.className = 'chat-message flex justify-start'
-                botMsg.innerHTML = `<div class="bg-white/10 rounded-xl px-4 py-2 max-w-[80%] text-sm text-white/80">${resposta}</div>`
+                botMsg.innerHTML =
+                    `<div class="bg-white/10 rounded-xl px-4 py-2 max-w-[80%] text-sm text-white/80">${resposta}</div>`
                 chat.appendChild(botMsg)
                 chat.scrollTop = chat.scrollHeight
             }, 800)
@@ -1213,7 +1523,8 @@
             const chat = document.getElementById('chat-beijo')
             const msg = document.createElement('div')
             msg.className = 'chat-message text-center'
-            msg.innerHTML = `<span class="text-pink/80 text-xs font-bold">💋 Agendado! Senha #${senha} • Aguarde ${filaBeijo.length} pessoa(s)</span>`
+            msg.innerHTML =
+                `<span class="text-pink/80 text-xs font-bold">💋 Agendado! Senha #${senha} • Aguarde ${filaBeijo.length} pessoa(s)</span>`
             chat.appendChild(msg)
             chat.scrollTop = chat.scrollHeight
 
@@ -1221,56 +1532,88 @@
         }
 
         // =====================================
-        // BARRAQUINHAS DE COMIDA
+        // CARDÁPIO
         // =====================================
-        const cardapio = [
-            { id: 1, nome: 'Pamonha', preco: 12.00, categoria: 'salgadas', emoji: '🌽', desc: 'Pamonha cremosa com queijo' },
-            { id: 2, nome: 'Curau', preco: 10.00, categoria: 'doces', emoji: '🥣', desc: 'Curau de milho verde cremoso' },
-            { id: 3, nome: 'Quentão', preco: 8.00, categoria: 'bebidas', emoji: '🍷', desc: 'Quentão com especiarias' },
-            { id: 4, nome: 'Vinagrete', preco: 7.00, categoria: 'salgadas', emoji: '🥗', desc: 'Vinagrete fresquinho' },
-            { id: 5, nome: 'Canjica', preco: 10.00, categoria: 'doces', emoji: '🥥', desc: 'Canjica com leite condensado' },
-            { id: 6, nome: 'Caldo Verde', preco: 14.00, categoria: 'salgadas', emoji: '🍲', desc: 'Caldo verde com calabresa' },
-            { id: 7, nome: 'Bolo de Milho', preco: 9.00, categoria: 'doces', emoji: '🍰', desc: 'Bolo de milho caseiro' },
-            { id: 8, nome: 'Suco de Milho', preco: 7.00, categoria: 'bebidas', emoji: '🥤', desc: 'Suco de milho gelado' },
-            { id: 9, nome: 'Cachorro-Quente', preco: 15.00, categoria: 'salgadas', emoji: '🌭', desc: 'Com molho especial da casa' },
-            { id: 10, nome: 'Pé de Moleque', preco: 6.00, categoria: 'doces', emoji: '🥜', desc: 'Pé de moleque crocante' },
-            { id: 11, nome: 'Chocolate Quente', preco: 9.00, categoria: 'bebidas', emoji: '☕', desc: 'Com chantilly e canela' },
-            { id: 12, nome: 'Espetinho', preco: 16.00, categoria: 'salgadas', emoji: '🍢', desc: 'Espetinho de carne com farofa' }
-        ]
+        function renderizarCategoriasCardapio() {
+            const container = document.getElementById('categorias-cardapio')
+            const categorias = [
+                { id: 'todas', nome: '🍽️ Todos os Sabores', count: cardapio.length },
+                { id: 'salgadas', nome: '🥟 Salgados', count: cardapio.filter(c => c.categoria === 'salgadas').length },
+                { id: 'doces', nome: '🍰 Doces', count: cardapio.filter(c => c.categoria === 'doces').length },
+                { id: 'bebidas', nome: '🥤 Bebidas', count: cardapio.filter(c => c.categoria === 'bebidas').length },
+                { id: 'destaques', nome: '⭐ Destaques', count: cardapio.filter(c => c.destaque).length },
+                { id: 'promocoes', nome: '🔥 Promoções', count: cardapio.filter(c => c.promocao).length }
+            ]
 
-        let comidaFiltroAtivo = 'todas'
-
-        function filtrarComidas(cat) {
-            comidaFiltroAtivo = cat
-            document.querySelectorAll('[data-food-tab]').forEach(b => {
-                b.classList.toggle('active', b.dataset.foodTab === cat)
-                b.classList.toggle('bg-green', b.dataset.foodTab === cat)
-                b.classList.toggle('text-white', b.dataset.foodTab === cat)
-                b.classList.toggle('bg-white/8', b.dataset.foodTab !== cat)
-                b.classList.toggle('border', b.dataset.foodTab !== cat)
-                b.classList.toggle('border-white/10', b.dataset.foodTab !== cat)
-                b.classList.toggle('text-white/80', b.dataset.foodTab !== cat)
-            })
-            renderizarComidas()
+            container.innerHTML = categorias.map(cat => `
+                <button onclick="filtrarCardapio('${cat.id}')" data-cardapio-cat="${cat.id}"
+                    class="cardapio-cat-btn ${cat.id === 'todas' ? 'active bg-green text-white' : 'bg-white/5 border border-white/10 text-white/70'} px-5 py-2.5 rounded-xl text-sm">
+                    ${cat.nome} <span class="cat-count">${cat.count}</span>
+                </button>
+            `).join('')
         }
 
-        function renderizarComidas() {
-            const grid = document.getElementById('grid-comidas')
-            const comidas = comidaFiltroAtivo === 'todas'
-                ? cardapio
-                : cardapio.filter(c => c.categoria === comidaFiltroAtivo)
+        function filtrarCardapio(cat) {
+            comidaFiltroAtivo = cat
+
+            document.querySelectorAll('[data-cardapio-cat]').forEach(b => {
+                const isActive = b.dataset.cardapioCat === cat
+                b.classList.toggle('active', isActive)
+                b.classList.toggle('bg-green', isActive)
+                b.classList.toggle('text-white', isActive)
+                b.classList.toggle('bg-white/5', !isActive)
+                b.classList.toggle('border', !isActive)
+                b.classList.toggle('border-white/10', !isActive)
+                b.classList.toggle('text-white/70', !isActive)
+            })
+
+            renderizarCardapio()
+        }
+
+        function renderizarCardapio() {
+            const grid = document.getElementById('grid-cardapio')
+            let comidas = cardapio
+
+            if (comidaFiltroAtivo === 'destaques') {
+                comidas = cardapio.filter(c => c.destaque)
+            } else if (comidaFiltroAtivo === 'promocoes') {
+                comidas = cardapio.filter(c => c.promocao)
+            } else if (comidaFiltroAtivo !== 'todas') {
+                comidas = cardapio.filter(c => c.categoria === comidaFiltroAtivo)
+            }
+
+            if (comidas.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-16">
+                        <div class="text-6xl mb-4">🍽️</div>
+                        <p class="text-white/40 text-lg">Nenhum item encontrado nessa categoria.</p>
+                    </div>
+                `
+                return
+            }
 
             grid.innerHTML = comidas.map(c => `
-                <div class="food-card rounded-2xl p-5 flex flex-col">
-                    <div class="text-5xl mb-3 text-center">${c.emoji}</div>
-                    <h3 class="font-bold text-white text-center">${c.nome}</h3>
-                    <p class="text-white/40 text-xs text-center mt-1 mb-3">${c.desc}</p>
-                    <div class="mt-auto flex justify-between items-center pt-3 border-t border-white/6">
-                        <span class="font-display text-xl text-green tracking-wide">R$ ${c.preco.toFixed(2)}</span>
-                        <button onclick="adicionarComida(${c.id})"
-                            class="bg-green/20 hover:bg-green/30 text-green-300 px-4 py-2 rounded-lg text-xs font-bold transition">
-                            + Adicionar
-                        </button>
+                <div class="cardapio-card">
+                    <div class="cardapio-img-container">
+                        <img src="${c.imagem}" alt="${c.nome}"
+                            onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #1a0040, #2d0060)'; this.parentElement.innerHTML += '<div class=\\'flex items-center justify-center h-full text-6xl\\'>🍴</div>'">
+                        <div class="cardapio-overlay"></div>
+                        ${c.promocao ? '<div class="cardapio-badge-promo">-20%</div>' : ''}
+                        ${c.vegano ? '<div class="cardapio-badge-vegano">🌱 Vegano</div>' : ''}
+                    </div>
+                    <div class="cardapio-info">
+                        <h3 class="cardapio-nome">${c.nome}</h3>
+                        <p class="cardapio-desc">${c.desc}</p>
+                        <div class="cardapio-estrelas">
+                            ${'⭐'.repeat(c.estrelas)}
+                            <span class="text-white/30 text-xs ml-1">(${c.estrelas}.0)</span>
+                        </div>
+                        <div class="cardapio-footer">
+                            <span class="cardapio-preco">R$ ${c.preco.toFixed(2)}</span>
+                            <button onclick="adicionarComida(${c.id})" class="cardapio-btn-add">
+                                + Adicionar
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('')
@@ -1287,7 +1630,7 @@
                 carrinhoComidas.push({ ...comida, qtd: 1 })
             }
             atualizarCarrinhoComidas()
-            mostrarToast(`🍴 ${comida.nome} adicionado!`)
+            mostrarToast(`🍴 ${comida.nome} adicionado ao pedido!`)
         }
 
         function removerComida(index) {
@@ -1314,15 +1657,22 @@
                 return `
                     <div class="flex justify-between items-center bg-white/5 rounded-xl p-3">
                         <div class="flex items-center gap-3">
-                            <span class="text-2xl">${c.emoji}</span>
+                            <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-lg">
+                                ${c.vegano ? '🌱' : '🍴'}
+                            </div>
                             <div>
-                                <p class="font-bold text-white text-sm">${c.nome} <span class="text-white/40">x${c.qtd}</span></p>
-                                <p class="text-green text-xs">R$ ${(c.preco * c.qtd).toFixed(2)}</p>
+                                <p class="font-bold text-white text-sm">${c.nome}
+                                    <span class="text-white/40 font-normal">x${c.qtd}</span>
+                                </p>
+                                <p class="text-green text-xs font-bold">R$ ${(c.preco * c.qtd).toFixed(2)}</p>
                             </div>
                         </div>
-                        <button onclick="removerComida(${i})" class="text-red-400 hover:text-red-300 text-xs font-bold transition">
-                            ✕
-                        </button>
+                        <div class="flex items-center gap-2">
+                            ${c.qtd > 1 ? `<button onclick="removerComida(${i})" class="text-white/40 hover:text-white text-xs transition">−</button>` : ''}
+                            <button onclick="removerComida(${i})" class="text-red-400 hover:text-red-300 text-xs font-bold transition">
+                                ✕
+                            </button>
+                        </div>
                     </div>
                 `
             }).join('')
@@ -1343,7 +1693,7 @@
                 mostrarToast('🍽️ Adicione itens ao pedido!')
                 return
             }
-            mostrarToast('🛍️ Pedido realizado com sucesso!')
+            mostrarToast('🛍️ Pedido realizado com sucesso! Bom apetite! 🌽')
             carrinhoComidas = []
             atualizarCarrinhoComidas()
         }
@@ -1392,64 +1742,105 @@
         }
 
         // =====================================
-        // TOAST
-        // =====================================
-        function mostrarToast(msg = '🎟️ Ingresso adicionado!') {
-            const t = document.getElementById('toast')
-            t.textContent = msg
-            t.classList.remove('opacity-0', 'translate-y-4')
-            t.classList.add('opacity-100', 'translate-y-0')
-            setTimeout(() => {
-                t.classList.add('opacity-0', 'translate-y-4')
-                t.classList.remove('opacity-100', 'translate-y-0')
-            }, 2500)
-        }
-
-        // =====================================
-        // FOGUEIRA QUE SEGUE O MOUSE
+        // FOGUEIRA QUE SEGUE O MOUSE (OTIMIZADA)
         // =====================================
         const fogueira = document.getElementById('fogueira-mouse');
-        let mouseX = 0, mouseY = 0;
-        let fogueiraX = 0, fogueiraY = 0;
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let fogueiraX = mouseX;
+        let fogueiraY = mouseY;
+        let rafId = null;
 
+        // Usa throttle para melhor performance
+        let lastMove = 0;
         document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastMove < 16) return; // ~60fps
+            lastMove = now;
             mouseX = e.clientX;
             mouseY = e.clientY;
         });
 
         function animarFogueira() {
-            // Interpolação suave (lerp)
-            fogueiraX += (mouseX - fogueiraX) * 0.08;
-            fogueiraY += (mouseY - fogueiraY) * 0.08;
+            // Interpolação suave
+            const lerp = 0.12;
+            fogueiraX += (mouseX - fogueiraX) * lerp;
+            fogueiraY += (mouseY - fogueiraY) * lerp;
 
-            fogueira.style.left = fogueiraX + 'px';
-            fogueira.style.top = (fogueiraY - 40) + 'px'; // 40px acima do cursor
+            // Usa transform em vez de left/top para melhor performance
+            fogueira.style.transform = `translate(${fogueiraX - 30}px, ${fogueiraY - 40}px) translateZ(0)`;
 
-            requestAnimationFrame(animarFogueira);
+            rafId = requestAnimationFrame(animarFogueira);
         }
 
-        // Esconde fogueira em dispositivos móveis (touch)
-        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        // Detecta dispositivo
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        if (isTouchDevice) {
             fogueira.style.display = 'none';
+            document.documentElement.style.cursor = 'auto';
+            document.body.style.cursor = 'auto';
         } else {
             fogueira.style.display = 'block';
-            animarFogueira();
+            fogueira.style.opacity = '1';
+            // Inicia a fogueira no centro da tela
+            fogueira.style.transform = `translate(${mouseX - 30}px, ${mouseY - 40}px) translateZ(0)`;
+            rafId = requestAnimationFrame(animarFogueira);
         }
 
-        // Mostra/esconde fogueira ao entrar/sair da página
+        // Otimiza visibilidade
         document.addEventListener('mouseleave', () => {
             fogueira.style.opacity = '0';
-            fogueira.style.transition = 'opacity 0.3s';
+            if (rafId) cancelAnimationFrame(rafId);
         });
 
         document.addEventListener('mouseenter', () => {
             fogueira.style.opacity = '1';
-            fogueira.style.transition = 'opacity 0.3s';
+            // Reinicia posição
+            fogueiraX = mouseX;
+            fogueiraY = mouseY;
+            if (!rafId || rafId <= 0) {
+                rafId = requestAnimationFrame(animarFogueira);
+            }
+        });
+
+        // Cleanup ao sair da página
+        window.addEventListener('beforeunload', () => {
+            if (rafId) cancelAnimationFrame(rafId);
         });
 
         // =====================================
         // CARREGAR SHOWS
         // =====================================
+        const categoriasDisponiveis = ['Forró', 'Funk', 'Piseiro', 'Pagode', 'Sertanejo', 'Trap']
+        const emojisCategorias = {
+            'Forró': '🪗',
+            'Funk': '🎙️',
+            'Piseiro': '🎵',
+            'Pagode': '🥁',
+            'Sertanejo': '🤠',
+            'Trap': '💎'
+        }
+
+        function renderizarCategorias() {
+            const container = document.getElementById('categorias-container')
+            let html = `
+                <button onclick="filtrarCategoria('')" data-cat=""
+                    class="cat-btn active bg-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                    Todos
+                </button>
+            `
+            categoriasDisponiveis.forEach(cat => {
+                html += `
+                    <button onclick="filtrarCategoria('${cat}')" data-cat="${cat}"
+                        class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                        ${emojisCategorias[cat]} ${cat}
+                    </button>
+                `
+            })
+            container.innerHTML = html
+        }
+
         async function carregarShows() {
             document.getElementById('loading-shows').classList.remove('hidden')
             document.getElementById('lista-shows').classList.add('hidden')
@@ -1471,6 +1862,7 @@
 
         function filtrarCategoria(cat) {
             categoriaAtiva = cat
+
             document.querySelectorAll('.cat-btn').forEach(b => {
                 const isActive = b.dataset.cat === cat
                 b.classList.toggle('active', isActive)
@@ -1481,6 +1873,7 @@
                 b.classList.toggle('border-white/10', !isActive)
                 b.classList.toggle('text-white/80', !isActive)
             })
+
             const filtrados = cat ? todosShows.filter(s => s.categoria === cat) : todosShows
             renderizarShows(filtrados)
         }
@@ -1489,7 +1882,8 @@
             const lista = document.getElementById('lista-shows')
             const count = document.getElementById('shows-count')
             lista.innerHTML = ''
-            count.textContent = `${shows.length} show${shows.length !== 1 ? 's' : ''} encontrado${shows.length !== 1 ? 's' : ''}`
+            count.textContent =
+                `${shows.length} show${shows.length !== 1 ? 's' : ''} encontrado${shows.length !== 1 ? 's' : ''}`
 
             if (shows.length === 0) {
                 lista.innerHTML = `
@@ -1621,8 +2015,10 @@
         // =====================================
         // INICIAR
         // =====================================
+        renderizarCategorias()
+        renderizarCategoriasCardapio()
+        renderizarCardapio()
         carregarShows()
-        renderizarComidas()
     </script>
 
 </body>
