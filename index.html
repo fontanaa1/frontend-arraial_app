@@ -675,6 +675,13 @@
             border-radius: 9999px;
             margin-left: 6px;
         }
+
+        #pagina-correio .fogueira-seguidor,
+        #pagina-cardapio .fogueira-seguidor,
+        #pagina-principal .fogueira-seguidor,
+        #splash-screen .fogueira-seguidor {
+            z-index: 99999 !important;
+        }
     </style>
 </head>
 
@@ -1763,7 +1770,7 @@
         } else {
             fogueira.style.display = 'block';
             fogueira.style.opacity = '1';
-            // Inicia no centro
+            fogueira.style.zIndex = '99999';  // ADICIONE ESTA LINHA
             fogueira.style.transform = `translate(${mouseX - 30}px, ${mouseY - 40}px)`;
             animarFogueira();
         }
