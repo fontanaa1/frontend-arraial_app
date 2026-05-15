@@ -342,9 +342,12 @@
         .fogueira-seguidor {
             position: fixed;
             pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
+            z-index: 99999;
+            /* era 9998, agora acima da splash (9999) */
             filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.8));
+            will-change: transform;
+            top: 0;
+            left: 0;
         }
 
         .fogueira-container {
@@ -1726,43 +1729,55 @@
         }
 
         // =====================================
-        // FOGUEIRA QUE SEGUE O MOUSE
+        // FOGUEIRA QUE SEGUE O MOUSE (CORRIGIDA)
         // =====================================
-        const fogueira = document.getElementById('fogueira-mouse')
-        let mouseX = 0,
-            mouseY = 0
-        let fogueiraX = 0,
-            fogueiraY = 0
+        const fogueira = document.getElementById('fogueira-mouse');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let fogueiraX = mouseX;
+        let fogueiraY = mouseY;
 
         document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX
-            mouseY = e.clientY
-        })
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
 
         function animarFogueira() {
-            fogueiraX += (mouseX - fogueiraX) * 0.1
-            fogueiraY += (mouseY - fogueiraY) * 0.1
+            // Interpolação suave
+            fogueiraX += (mouseX - fogueiraX) * 0.1;
+            fogueiraY += (mouseY - fogueiraY) * 0.1;
 
-            fogueira.style.left = fogueiraX + 'px'
-            fogueira.style.top = (fogueiraY - 35) + 'px'
+            // Usa transform para posicionar (GPU acelerado)
+            fogueira.style.transform = `translate(${fogueiraX - 30}px, ${fogueiraY - 40}px)`;
 
-            requestAnimationFrame(animarFogueira)
+            requestAnimationFrame(animarFogueira);
         }
 
-        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-            fogueira.style.display = 'none'
+        // Verifica se é dispositivo touch
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        if (isTouchDevice) {
+            fogueira.style.display = 'none';
+            document.documentElement.style.cursor = 'auto';
+            document.body.style.cursor = 'auto';
         } else {
-            fogueira.style.display = 'block'
-            animarFogueira()
+            fogueira.style.display = 'block';
+            fogueira.style.opacity = '1';
+            // Inicia no centro
+            fogueira.style.transform = `translate(${mouseX - 30}px, ${mouseY - 40}px)`;
+            animarFogueira();
         }
 
         document.addEventListener('mouseleave', () => {
-            fogueira.style.opacity = '0'
-        })
+            fogueira.style.opacity = '0';
+        });
 
         document.addEventListener('mouseenter', () => {
-            fogueira.style.opacity = '1'
-        })
+            fogueira.style.opacity = '1';
+            // Puxa a fogueira para a posição atual do mouse
+            fogueiraX = mouseX;
+            fogueiraY = mouseY;
+        });
 
         // =====================================
         // CARREGAR SHOWS
