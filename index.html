@@ -40,35 +40,25 @@
         }
 
         /* ===================================== */
-        /* CURSOR OCULTO - SÓ A FOGUEIRA (CORRIGIDO) */
+        /* CURSOR OCULTO - SÓ A FOGUEIRA */
         /* ===================================== */
-        html {
-            cursor: none;
+        * {
+            cursor: none !important;
         }
 
-        body {
-            cursor: none;
+        input,
+        textarea,
+        select,
+        button,
+        a,
+        [onclick] {
+            cursor: none !important;
         }
 
-        /* Mantém cursor em dispositivos touch */
         @media (pointer: coarse) {
-
-            html,
-            body {
-                cursor: auto;
+            * {
+                cursor: auto !important;
             }
-
-            #fogueira-mouse {
-                display: none !important;
-            }
-        }
-
-        /* Garante que a fogueira fique sempre visível e suave */
-        .fogueira-seguidor {
-            will-change: left, top;
-            transform: translate(-50%, -50%) translateZ(0);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
         }
 
         body {
@@ -681,12 +671,6 @@
             padding: 2px 7px;
             border-radius: 9999px;
             margin-left: 6px;
-        }
-
-        /* Otimização de performance */
-        .fogueira-seguidor {
-            contain: layout style paint;
-            will-change: transform;
         }
     </style>
 </head>
@@ -1742,72 +1726,43 @@
         }
 
         // =====================================
-        // FOGUEIRA QUE SEGUE O MOUSE (OTIMIZADA)
+        // FOGUEIRA QUE SEGUE O MOUSE
         // =====================================
-        const fogueira = document.getElementById('fogueira-mouse');
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let fogueiraX = mouseX;
-        let fogueiraY = mouseY;
-        let rafId = null;
+        const fogueira = document.getElementById('fogueira-mouse')
+        let mouseX = 0,
+            mouseY = 0
+        let fogueiraX = 0,
+            fogueiraY = 0
 
-        // Usa throttle para melhor performance
-        let lastMove = 0;
         document.addEventListener('mousemove', (e) => {
-            const now = Date.now();
-            if (now - lastMove < 16) return; // ~60fps
-            lastMove = now;
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+            mouseX = e.clientX
+            mouseY = e.clientY
+        })
 
         function animarFogueira() {
-            // Interpolação suave
-            const lerp = 0.12;
-            fogueiraX += (mouseX - fogueiraX) * lerp;
-            fogueiraY += (mouseY - fogueiraY) * lerp;
+            fogueiraX += (mouseX - fogueiraX) * 0.1
+            fogueiraY += (mouseY - fogueiraY) * 0.1
 
-            // Usa transform em vez de left/top para melhor performance
-            fogueira.style.transform = `translate(${fogueiraX - 30}px, ${fogueiraY - 40}px) translateZ(0)`;
+            fogueira.style.left = fogueiraX + 'px'
+            fogueira.style.top = (fogueiraY - 35) + 'px'
 
-            rafId = requestAnimationFrame(animarFogueira);
+            requestAnimationFrame(animarFogueira)
         }
 
-        // Detecta dispositivo
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-        if (isTouchDevice) {
-            fogueira.style.display = 'none';
-            document.documentElement.style.cursor = 'auto';
-            document.body.style.cursor = 'auto';
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            fogueira.style.display = 'none'
         } else {
-            fogueira.style.display = 'block';
-            fogueira.style.opacity = '1';
-            // Inicia a fogueira no centro da tela
-            fogueira.style.transform = `translate(${mouseX - 30}px, ${mouseY - 40}px) translateZ(0)`;
-            rafId = requestAnimationFrame(animarFogueira);
+            fogueira.style.display = 'block'
+            animarFogueira()
         }
 
-        // Otimiza visibilidade
         document.addEventListener('mouseleave', () => {
-            fogueira.style.opacity = '0';
-            if (rafId) cancelAnimationFrame(rafId);
-        });
+            fogueira.style.opacity = '0'
+        })
 
         document.addEventListener('mouseenter', () => {
-            fogueira.style.opacity = '1';
-            // Reinicia posição
-            fogueiraX = mouseX;
-            fogueiraY = mouseY;
-            if (!rafId || rafId <= 0) {
-                rafId = requestAnimationFrame(animarFogueira);
-            }
-        });
-
-        // Cleanup ao sair da página
-        window.addEventListener('beforeunload', () => {
-            if (rafId) cancelAnimationFrame(rafId);
-        });
+            fogueira.style.opacity = '1'
+        })
 
         // =====================================
         // CARREGAR SHOWS
